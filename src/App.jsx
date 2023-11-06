@@ -2,6 +2,22 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import personsService from "./services/persons";
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className="notification">{message}</div>;
+};
+
+const ErrorMessage = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+
+  return <div className="error">{message}</div>;
+};
+
 const FilterForm = ({ filterPerson }) => {
   return (
     <div>
@@ -65,6 +81,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [filterStatus, setFilterStatus] = useState(false);
   const [filterCode, setFilterCode] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState(null);
 
   useEffect(() => {
     personsService.getAll().then((initialPersons) => {
@@ -100,6 +118,10 @@ const App = () => {
       personsService.create(numberObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
         setNewName("");
+        setNotificationMessage(`Added ${numberObject.name}`);
+        setTimeout(() => {
+          setNotificationMessage(null);
+        }, 5000);
       });
     }
 
@@ -146,7 +168,7 @@ const App = () => {
     filterCode === ""
       ? persons
       : persons.filter((person) =>
-          person.name.toLowerCase().includes(filterCode)
+          person.name.toLowerCase().includes(filterCode.toLowerCase())
         );
 
   // const updatePersonNumber = (id) => {
@@ -158,15 +180,27 @@ const App = () => {
   const deletePerson = (id) => {
     const person = persons.find((person) => person.id === id);
     if (window.confirm(`Delete ${person.name}`)) {
-      personsService.deletePerson(id).then((removedPerson) => {
-        setPersons(persons.filter((person) => person.id !== id));
-      });
+      personsService
+        .deletePerson(id)
+        .then((removedPerson) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          setErrorMessage(
+            `Information on ${person.name} has already been removed from the server`
+          );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 4000);
+        });
     }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
+      <ErrorMessage message={errorMessage} />
       <FilterForm filterPerson={filterPerson} />
       <h2>Add a new phonenumber</h2>
       <PersonForm
