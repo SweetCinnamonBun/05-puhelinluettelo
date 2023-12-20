@@ -6,8 +6,9 @@ import sc1 from "./images/sc1.png";
 import sc2 from "./images/sc2.png";
 import sc3 from "./images/sc3.png";
 import sc4 from "./images/sc4.png";
+import sc5 from "./images/sc5.png";
 
-const images = [sc1, sc2, sc3, sc4];
+const images = [sc1, sc2, sc3, sc4, sc5];
 
 const Images = ({ images }) => {
   return (
