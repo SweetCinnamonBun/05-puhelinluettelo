@@ -13,9 +13,6 @@ const Images = ({ images }) => {
   return (
     <>
       <h1 className="images-of-project">Kuvat projektista</h1>
-      <h2 className="click-img">
-        (kuvaa klikkaamalla saattaa tulla puhelinnumeroja)
-      </h2>
       <div className="images-container">
         {images.map((x) => {
           return (
