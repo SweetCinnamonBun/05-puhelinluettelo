@@ -1,6 +1,35 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import "./App.css";
 import personsService from "./services/persons";
+import sc1 from "./images/sc1.png";
+import sc2 from "./images/sc2.png";
+import sc3 from "./images/sc3.png";
+import sc4 from "./images/sc4.png";
+
+const images = [sc1, sc2, sc3, sc4];
+
+const Images = ({ images }) => {
+  return (
+    <>
+      <h1 className="images-of-project">Kuvat projektista</h1>
+      <h2 className="click-img">
+        (kuvaa klikkaamalla saattaa tulla puhelinnumeroja)
+      </h2>
+      <div className="images-container">
+        {images.map((x) => {
+          return (
+            <a href={x}>
+              <figure className="figure-img">
+                <img src={x} />
+              </figure>
+            </a>
+          );
+        })}
+      </div>
+    </>
+  );
+};
 
 const Notification = ({ message }) => {
   if (message === null) {
@@ -213,6 +242,7 @@ const App = () => {
       <h2>Numbers</h2>
       ...
       <Persons showPersons={showPersons} deletePerson={deletePerson} />
+      <Images images={images} />
     </div>
   );
 };
